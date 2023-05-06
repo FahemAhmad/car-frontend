@@ -22,7 +22,7 @@ function TicketTable({ tickets, lotteryNo, setStats, stats }) {
       if (params.colDef.field === "sold") {
         let value = ticketToUpdate.sold;
         fetch(
-          `http://localhost:5000/api/tickets/sold-ticket/${lotteryNo}/${
+          `https://car-backend-hugg.onrender.com/api/tickets/sold-ticket/${lotteryNo}/${
             ticketToUpdate.ticketNumber
           }/${!value}`,
           requestOptions
@@ -62,7 +62,7 @@ function TicketTable({ tickets, lotteryNo, setStats, stats }) {
       } else {
         const value = ticketToUpdate.availability;
         fetch(
-          `http://localhost:5000/api/tickets/claim-ticket/${lotteryNo}/${ticketToUpdate.ticketNumber}/${value}`,
+          `https://car-backend-hugg.onrender.com/api/tickets/claim-ticket/${lotteryNo}/${ticketToUpdate.ticketNumber}/${value}`,
           requestOptions
         )
           .then((response) => response.json())

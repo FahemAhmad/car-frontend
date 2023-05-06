@@ -22,7 +22,7 @@ function App() {
     const getTickets = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/tickets/unsold-tickets"
+          "https://car-backend-hugg.onrender.com/api/tickets/unsold-tickets"
         );
         const data = await response.json();
         setTickets(data.availableTickets);

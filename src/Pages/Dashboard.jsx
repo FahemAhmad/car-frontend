@@ -19,7 +19,7 @@ function Dashboard({ handleLogout, lotteryNo }) {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/tickets/tickets")
+    fetch("https://car-backend-hugg.onrender.com/api/tickets/tickets")
       .then((response) => response.json())
       .then((data) => {
         setStats(data);
@@ -31,15 +31,18 @@ function Dashboard({ handleLogout, lotteryNo }) {
 
   function generateTickets() {
     if (totalTickets > 0 && totalTickets <= 100000) {
-      fetch("http://localhost:5000/api/tickets/create-lottery", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          totalTickets: totalTickets, // Replace with the total number of tickets you want to create
-        }),
-      })
+      fetch(
+        "https://car-backend-hugg.onrender.com/api/tickets/create-lottery",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            totalTickets: totalTickets, // Replace with the total number of tickets you want to create
+          }),
+        }
+      )
         .then((response) => response.json())
         .then((data) => {
           console.log(data.message); // Successfully created lottery 1

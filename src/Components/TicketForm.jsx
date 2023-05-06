@@ -80,7 +80,7 @@ function TicketForm({ tickets, loading, lotteryNo, setTickets }) {
       try {
         setBtnLoading(true);
         const response = await fetch(
-          `http://localhost:5000/api/tickets/sell-tickets/${lotteryNo}`,
+          `https://car-backend-hugg.onrender.com/api/tickets/sell-tickets/${lotteryNo}`,
           {
             method: "PATCH",
             headers: {
