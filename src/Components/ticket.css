@@ -43,3 +43,7 @@
 .ag-theme-alpine {
   max-height: 500px; /* set a maximum height for the container */
 }
+
+.selected {
+  background-color: green !important;
+}

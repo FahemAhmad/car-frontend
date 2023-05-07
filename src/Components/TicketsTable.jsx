@@ -122,13 +122,18 @@ function TicketTable({ tickets, lotteryNo, setStats, stats }) {
   };
 
   const columnDefs = [
-    { headerName: "Ticket No", field: "ticketNumber", sortable: true, flex: 1 },
+    {
+      headerName: "Ticket No",
+      field: "ticketNumber",
+      sortable: true,
+      resizable: true,
+    },
     {
       headerName: "Status",
       field: "sold",
       editable: true,
-      flex: 1,
       sortable: true,
+      resizable: true,
       cellClassRules: {
         "cell-value-green": function (params) {
           return !params.value;
@@ -145,8 +150,8 @@ function TicketTable({ tickets, lotteryNo, setStats, stats }) {
       headerName: "Availability",
       field: "availability",
       editable: true,
-      flex: 1,
       sortable: true,
+      resizable: true,
       cellClassRules: {
         "cell-value-green": function (params) {
           return !params.value;
@@ -163,6 +168,7 @@ function TicketTable({ tickets, lotteryNo, setStats, stats }) {
       headerName: "Ticket Owner",
       field: "user",
       flex: 1,
+      resizable: true,
       sortable: true,
       cellRenderer: function (params) {
         return params.value;

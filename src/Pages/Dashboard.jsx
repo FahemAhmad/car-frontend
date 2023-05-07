@@ -121,7 +121,7 @@ function Dashboard({ handleLogout, lotteryNo }) {
           </div>
         )}
         {selectedTickets === 2 && (
-          <div className="row" style={{ height: "100%" }}>
+          <div className="row">
             <UsersTable />
           </div>
         )}

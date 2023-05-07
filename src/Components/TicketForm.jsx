@@ -77,6 +77,10 @@ function TicketForm({ tickets, loading, lotteryNo, setTickets }) {
         email,
       });
 
+      let mobNumber =
+        phoneNumberCountryCode === "MX"
+          ? `+52 ${phoneNumber}`
+          : `+1 ${phoneNumber}`;
       try {
         setBtnLoading(true);
         const response = await fetch(
@@ -93,7 +97,7 @@ function TicketForm({ tickets, loading, lotteryNo, setTickets }) {
                 email: email,
                 state: state,
                 city: city,
-                phoneNumber: phoneNumber,
+                phoneNumber: mobNumber,
               },
             }),
           }
@@ -108,11 +112,18 @@ function TicketForm({ tickets, loading, lotteryNo, setTickets }) {
           );
           setTickets(newTickets);
 
-          sendWhatsAppMessage(
-            "34526442340445",
-            `Hola, quiero comprar ${selectedTickets.length} boletos para la lotería #${lotteryNo}`
-          );
           toast.success("Tickets Vendidos Exitosamente!");
+          sendWhatsAppMessage(
+            "526442340445",
+            `Hello,
+            I would like to reserve the following lottery tickets: ${selectedTickets.join(
+              ", "
+            )} for lottery number ${lotteryNo}.
+            The name is: ${fullName}.
+            I am located in: ${city}, ${state} and my phone number is: ${mobNumber}.
+            My email address is: ${email}.
+            Thank you.`
+          );
         }
 
         // clear the form data
@@ -194,24 +205,6 @@ function TicketForm({ tickets, loading, lotteryNo, setTickets }) {
     setItemOffset(offset);
   };
 
-  const handleSearch = () => {
-    if (Array.isArray(tickets)) {
-      const filteredTickets = tickets.filter((ticket) =>
-        ticket.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setCurrentItems(filteredTickets.slice(0, itemsPerPage));
-      setPageCount(Math.ceil(filteredTickets.length / itemsPerPage));
-    } else {
-      tickets.then((data) => {
-        const filteredTickets = data.filter((ticket) =>
-          ticket.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-        setCurrentItems(filteredTickets.slice(0, itemsPerPage));
-        setPageCount(Math.ceil(filteredTickets.length / itemsPerPage));
-      });
-    }
-  };
-
   useEffect(() => {
     if (selectedTickets.length > 0) {
       const newErrors = { ...errors };
@@ -238,7 +231,7 @@ function TicketForm({ tickets, loading, lotteryNo, setTickets }) {
             <ReactFlagsSelect
               selected={phoneNumberCountryCode}
               onSelect={(code) => setPhoneNumberCountryCode(code)}
-              countries={["ES", "US"]}
+              countries={["MX", "US"]}
             ></ReactFlagsSelect>
             <input
               type="number"
@@ -347,7 +340,7 @@ function TicketForm({ tickets, loading, lotteryNo, setTickets }) {
           </div>
 
           <button className="select-ticket" type="submit">
-            {btnLoading ? <ClipLoader color="orangered" /> : "Apartar boletos"}
+            {btnLoading ? <ClipLoader color="white" /> : "Apartar boletos"}
           </button>
         </div>
       </form>
@@ -400,7 +393,9 @@ function TicketForm({ tickets, loading, lotteryNo, setTickets }) {
             {currentItems.map((ticket, index) => (
               <div
                 key={ticket}
-                className="ticket"
+                className={`ticket ${
+                  selectedTickets.includes(ticket) && "selected"
+                }`}
                 onClick={() =>
                   setSelectedTickets(() => {
                     if (selectedTickets.includes(ticket)) {

@@ -15,31 +15,31 @@ function UsersTable() {
           field: "user.fullName",
           headerName: "Full Name",
           sortable: true,
-          flex: 1,
+          resizable: true,
         },
         {
           field: "user.email",
           headerName: "Email",
           sortable: true,
-          flex: 1,
+          resizable: true,
         },
         {
           field: "user.phoneNumber",
           headerName: "Phone Number",
           sortable: true,
-          flex: 1,
+          resizable: true,
         },
         {
           field: "user.state",
           headerName: "State",
           sortable: true,
-          flex: 1,
+          resizable: true,
         },
         {
           field: "user.city",
           headerName: "City",
           sortable: true,
-          flex: 1,
+          resizable: true,
         },
       ],
     },
@@ -47,23 +47,23 @@ function UsersTable() {
       headerName: "Booked Tickets",
       field: "bookedTickets",
       sortable: true,
-      flex: 1,
       valueGetter: (params) => {
         return params.data.bookedTickets
           .map((ticket) => ticket.ticketNumbers.join(", "))
           .join("\n");
       },
+      resizable: true,
     },
     {
       headerName: "Sold Tickets",
       field: "soldTickets",
       sortable: true,
-      flex: 1,
       valueGetter: (params) => {
-        return params.data.soldTickets
-          .map((ticket) => ticket.ticketNumber)
-          .join(", ");
+        return params.data.soldTickets.map((ticket) =>
+          ticket.ticketNumbers.join(", ")
+        );
       },
+      resizable: true,
     },
   ];
 
