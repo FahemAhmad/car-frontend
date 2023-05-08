@@ -6,6 +6,7 @@ import Sidebar from "../Components/Sidebar";
 import TicketTable from "../Components/TicketsTable";
 import { Column } from "ag-grid-community";
 import UsersTable from "../Components/UsersTable";
+import Modal from "../Components/Modal";
 
 function Dashboard({ handleLogout, lotteryNo }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -13,6 +14,8 @@ function Dashboard({ handleLogout, lotteryNo }) {
   const [stats, setStats] = useState({});
   const [totalTickets, setTotalTickets] = useState(0);
   const [selectedTickets, setSelectedTickets] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -31,29 +34,37 @@ function Dashboard({ handleLogout, lotteryNo }) {
 
   function generateTickets() {
     if (totalTickets > 0 && totalTickets <= 100000) {
-      fetch(
-        "https://car-backend-hugg.onrender.com/api/tickets/create-lottery",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            totalTickets: totalTickets, // Replace with the total number of tickets you want to create
-          }),
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data.message); // Successfully created lottery 1
-          toast.success("New Lottery created");
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.error(error);
-          toast.error("Error starting lottry.");
-        });
+      setShowModal(true);
     }
+  }
+
+  function createLottery() {
+    setLoading(true);
+    fetch("https://car-backend-hugg.onrender.com/api/tickets/create-lottery", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        totalTickets: totalTickets, // Replace with the total number of tickets you want to create
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data.message); // Successfully created lottery 1
+        setLoading(false);
+        toast.success("New Lottery created");
+        window.location.reload();
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.error(error);
+        toast.error("Error starting lottry.");
+      });
+  }
+
+  function cancelLottery() {
+    setShowModal(false);
   }
 
   return (
@@ -74,6 +85,23 @@ function Dashboard({ handleLogout, lotteryNo }) {
           {selectedTickets === 1 ? "Tickets Operations" : "Users"}
         </p>
         <hr />
+        <div className="row">
+          <input
+            type="number"
+            style={{
+              backgroundColor: "transparent",
+              color: "white",
+              border: "none",
+              width: "30%",
+              borderBottom: "1px solid white",
+              height: 35,
+            }}
+            max={100000}
+            min={1}
+            value={totalTickets}
+            onChange={(e) => setTotalTickets(e.target.value)}
+          />
+        </div>
         <div className="row" style={{ flexWrap: "wrap" }}>
           <button
             className="card"
@@ -84,21 +112,6 @@ function Dashboard({ handleLogout, lotteryNo }) {
             onClick={() => generateTickets()}
           >
             <h1>Generate new tickets</h1>
-            <input
-              type="number"
-              style={{
-                backgroundColor: "transparent",
-                color: "white",
-                border: "none",
-                width: "30%",
-                borderBottom: "1px solid white",
-                height: 35,
-              }}
-              max={100000}
-              min={1}
-              value={totalTickets}
-              onChange={(e) => setTotalTickets(e.target.value)}
-            />
           </button>
 
           <button className="card">
@@ -126,6 +139,15 @@ function Dashboard({ handleLogout, lotteryNo }) {
           </div>
         )}
       </div>
+
+      <Modal
+        show={showModal}
+        onClose={cancelLottery}
+        onConfirm={createLottery}
+        title={"Create Lottery"}
+        message={"Are you sure you want to create a new lottery?"}
+        loading={loading}
+      />
     </>
   );
 }
